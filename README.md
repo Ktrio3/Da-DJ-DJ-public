@@ -1,0 +1,12 @@
+# Da-DJ-DJ and DISMantle
+
+The Diminished Java (DJ) compiler was designed for use in a compilers course 
+by my advisor, [Dr. Jay Ligatti](https://cse.usf.edu/~ligatti/). As the name suggests,
+it is similar to the Java language, but without all of the features. It includes support for classes, inheritence, and polymorphism. Students build the compiler using
+flex, bison, and C. A full description of the language can be found on his website. The DJ compiler in class is designed to output a Diminished Instruction Set Machine (DISM) program, which is a simple RISC-like instruction set; Dr. Ligatti provides a simulator program to interpret DISM programs. 
+
+I worked as the TA for compilers for more than 4 years, and made several improvements and tools to make my life easier while grading. This repo contains the readmes for those projects to display the work I did since I cannot share the code without ruining the assignments for students. 
+
+The first tool, [Da-DJ-DJ](./README-DaDJDJ.md), is a "DJ compiler" compiler that allows you to pick and choose which DJ features you want to support. Since every yearly DJ compiler is different, we originally needed to overhaul large sections of the compiler by adding new features and removing old features. Now, this is all done programmatically. One cool result is that you can enable all the features, and have a compiler that can handle any DJ program from any year. The output is a set of flex, bison, and C files that are equivalent to the normal DJ compiler or that include extra features to work with DISMantle (introduced below). Da-DJ-DJ can even be used to generate the intermediate object files that are provided to students without leaking any additional information. 
+
+DISMantle is a modified version of the DISM simulator that includes support for breakpoints, functioning in a fashion similar to GDB. It also greatly improves the runtime of the simulator by modifying the underlying data structures and adding a label symbol table, reducing the instruction lookup time from O(n) to O(1). Finally, the DISMantle debugger can be given a DJ file, which then parses and creates the symbol table for the DJ program. This allows for even more contextual information during debugging; for example, when printing the heap, the contents are labelled with the types and field names they correspond to.
