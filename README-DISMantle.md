@@ -2,6 +2,7 @@
 
 - [DISMantle](#dismantle)
   - [Debugging with DISMantle](#debugging-with-dismantle)
+    - [Better Errors in 2024](#better-errors-in-2024)
     - [A Simple Example -- Finding a Null Dereference](#a-simple-example----finding-a-null-dereference)
   - [DISM Improvements](#dism-improvements)
     - [AST Printing](#ast-printing)
@@ -46,10 +47,34 @@ DJ program. The symbol table is then available during debugging.
   - Memory m
   - Heap h
   - Stack s
+- The reset command, "r", clears memory and resets the program, ready to run again
+- The write command, "w", changes a memory location
+  - The first arg is type: r for register, m for memory, and p for PC
+  - The second arg is location (or value for PC): register 0-8 or memory 0-65535
+  - The third arg is the value: any valid DISM nat value (an unsigned int)
+- The quit command, "q", exits :(
 
 Hitting enter (no whitespace, just a single newline char) will rerun the last command.
 
 Note that placing a breakpoint on or stepping into a brk instruction will cause the code to break twice. A brk instruction also cannot be removed.
+
+### Better Errors in 2024
+
+DISMantle now has better error handling! It was extremely annoying to load the symbol table,
+place breakpoints, and then lose all that work when the program crashed. Now all errors are 
+caught and redirected to the debug console. Ready to run it again? Use the new "reset" command
+to clear memory and set PC back to 0.
+
+Any comments that follow an instruction are now displayed when printing the context. For example,
+a common practice is to write the DISM as "mov 0 0 ; START METHOD HERE". That comment will
+now be printed with the context, as well as the proper line number (not just the instruction number). Now "tagging" instructions in the DJ compiler with the expr type that produced it is
+easy to quickly find. 
+
+This also means you can debug in crash context. You can use the info command at the crash
+point to debug memory as it was when it crashed. 
+
+You can also use the write command to modify memory. Very niche, but technically you can now
+recover any program (although any fixes must be repeated as you cannot add/edit/remove instructions). I'm like that astronaut using Lisp to save Deep Space 1 (except my REPL is terrible ¯\\_(ツ)_/¯ )
 
 ### A Simple Example -- Finding a Null Dereference
 
